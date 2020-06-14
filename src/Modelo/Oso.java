@@ -93,9 +93,9 @@ public class Oso extends Thread {
     private void moverAlTarro() {
         while (Oso.getX() < VistaMesa.limite.getX()) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(5);
                 Oso.setLocation(Oso.getX() + ((int) (Math.random() * 5)), Oso.getY());
-                Thread.sleep(10);
+                Thread.sleep(5);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Oso.class.getName()).log(Level.SEVERE, null, ex);
             }

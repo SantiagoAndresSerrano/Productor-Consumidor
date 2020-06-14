@@ -19,7 +19,7 @@ public class Mesa extends Thread {
     static Semaphore produccion = new Semaphore(0, true);
     static Semaphore consumo = new Semaphore(1);
     public JLabel tarro;
-    static int CANTIDAD = 20;
+    static int CANTIDAD = 8;
     static int TARROS = 5;
 
     static int cantidad = CANTIDAD;
