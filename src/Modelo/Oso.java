@@ -8,6 +8,7 @@ package Modelo;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 
 /**
  *
@@ -16,34 +17,60 @@ import java.util.logging.Logger;
 public class Oso extends Thread {
 
     static Semaphore consumo = Mesa.consumo;
+    JLabel Oso;
+
+    public Oso(JLabel Oso) {
+        this.Oso = Oso;
+    }
 
     @Override
     public void run() {
-
+        int aux = 0;
         while (Mesa.tarros < Mesa.TARROS) {
 
             try {
 
-                if (Mesa.cantidad <= Mesa.CANTIDAD && Mesa.cantidad > 0) {
-                    
+                if (Mesa.cantidad > 0) {
+
                     Thread.sleep(800);
-                    if(Mesa.tarros == Mesa.TARROS)
-                    {
-                        
-                    this.stop();
+                    if (Mesa.tarros == Mesa.TARROS) {
+
+                        this.stop();
                     }
-                        
+
+                    moverAlTarro();
+
                     System.out.println("Consumo miel..." + Mesa.cantidad);
+
                     Mesa.cantidad--;
+                    VistaMesa.cantidadMiel.setText(""+Mesa.cantidad);
+                    
+                    if (Mesa.cantidad == Mesa.CANTIDAD / 2) { // se comio la mitad
+                        VistaMesa.tarro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/tarro_medioLLeno - copia.png")));
+                    }
+                    Thread.sleep(30);
+                    if (Mesa.cantidad == (Mesa.CANTIDAD/2)-1) {
+                        VistaMesa.tarro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/tarro_medioLLeno.png")));
+
+                    }
+                    
+                    if (Mesa.cantidad - 1 == 0) {
+                        VistaMesa.tarro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/tarro_vacio.png")));
+
+                    }
 
                 }
                 if (Mesa.cantidad == 0) {
+                      aux++;
+                    VistaMesa.tarrosConsumidos.setText(""+aux);
+                    moverAlTronco();
                     System.out.println("===***=================================****=======");
                     System.out.println("Espero a que produzcan tarros de miel...");
                     System.out.println("===***=================================****=======");
-                    while (true) {
-                        if (Mesa.cantidad >= (Mesa.CANTIDAD - 1)) {
+                    Thread.sleep(400);
 
+                    while (true) {
+                        if (Mesa.cantidad >= (Mesa.CANTIDAD-2)) {
                             break;
                         }
                         Thread.sleep(400);
@@ -61,6 +88,30 @@ public class Oso extends Thread {
 
         }
 
+    }
+
+    private void moverAlTarro() {
+        while (Oso.getX() < VistaMesa.limite.getX()) {
+            try {
+                Thread.sleep(10);
+                Oso.setLocation(Oso.getX() + ((int) (Math.random() * 5)), Oso.getY());
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Oso.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void moverAlTronco() {
+        while (Oso.getX() > VistaMesa.oso1.getX()) {
+            try {
+                Thread.sleep(10);
+                Oso.setLocation(Oso.getX() - ((int) (Math.random() * 5)), Oso.getY());
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Oso.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }
